@@ -1,0 +1,52 @@
+---
+import { cn } from '@/lib/utils';
+
+interface Props {
+  /** Renders an <a> when set, otherwise a <button> */
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'accent';
+  size?: 'sm' | 'md';
+  class?: string;
+  type?: 'button' | 'submit';
+  external?: boolean;
+  [key: string]: unknown;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  class: className,
+  type = 'button',
+  external = false,
+  ...rest
+} = Astro.props;
+
+const classes = cn(
+  'inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50',
+  variant === 'primary' && 'bg-primary text-primary-foreground hover:bg-primary/85',
+  variant === 'secondary' && 'border border-border bg-card text-foreground hover:bg-muted',
+  variant === 'ghost' && 'text-muted-foreground hover:bg-muted hover:text-foreground',
+  variant === 'accent' && 'bg-accent text-accent-foreground hover:bg-accent/85',
+  size === 'sm' && 'h-8 px-3 text-xs',
+  size === 'md' && 'h-10 px-4 text-sm',
+  className,
+);
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      class={classes}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      {...rest}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class={classes} {...rest}>
+      <slot />
+    </button>
+  )
+}

@@ -1,0 +1,47 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { url } from '@/lib/utils';
+---
+
+<BaseLayout title="404 — Page not found" description="This page could not be found." noindex>
+  <div class="container-page flex flex-col items-center py-20 text-center sm:py-28">
+    <p class="font-mono text-7xl font-bold tracking-tight text-accent sm:text-8xl">404</p>
+    <h1 class="mt-4 text-xl font-semibold tracking-tight sm:text-2xl">
+      Looks like this route doesn't exist.
+    </h1>
+
+    {/* Terminal window */}
+    <div class="mt-8 w-full max-w-md overflow-hidden rounded-xl border border-border bg-code-bg text-left shadow-sm">
+      <div class="flex items-center gap-1.5 border-b border-border bg-muted/60 px-4 py-2.5">
+        <span class="size-2.5 rounded-full bg-red-500/70"></span>
+        <span class="size-2.5 rounded-full bg-amber-500/70"></span>
+        <span class="size-2.5 rounded-full bg-green-500/70"></span>
+        <span class="ml-2 font-mono text-xs text-muted-foreground">zsh — 404</span>
+      </div>
+      <div class="px-4 py-3.5 font-mono text-xs leading-relaxed sm:text-sm">
+        <p><span class="text-success">$</span> cd <span id="requested-path">/requested-page</span></p>
+        <p class="text-muted-foreground">zsh: no such file or directory</p>
+        <p class="mt-1"><span class="text-success">$</span> <span class="animate-pulse">▌</span></p>
+      </div>
+    </div>
+
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+      <Button href={url('/')}>
+        <Icon name="arrow-left" size={14} />
+        Back to home
+      </Button>
+      <Button href={url('/blog')} variant="secondary">Read the blog</Button>
+      <Button href={url('/search')} variant="secondary">
+        <Icon name="search" size={14} />
+        Search
+      </Button>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const el = document.getElementById('requested-path');
+  if (el) el.textContent = location.pathname;
+</script>

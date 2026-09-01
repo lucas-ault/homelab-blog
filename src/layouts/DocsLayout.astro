@@ -1,0 +1,115 @@
+---
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import type { Doc } from '@/lib/content';
+import { getDocsGroups } from '@/lib/content';
+import { url } from '@/lib/utils';
+import DocsSidebar from '@/components/docs/DocsSidebar.astro';
+import TableOfContents from '@/components/blog/TableOfContents.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  doc: Doc;
+  headings: MarkdownHeading[];
+}
+
+const { doc, headings } = Astro.props;
+const groups = await getDocsGroups();
+
+// Flat, ordered list for prev/next navigation
+const flat = groups.flatMap((g) => g.items);
+const index = flat.findIndex((d) => d.id === doc.id);
+const prev = index > 0 ? flat[index - 1] : null;
+const next = index < flat.length - 1 ? flat[index + 1] : null;
+---
+
+<BaseLayout title={doc.data.title} description={doc.data.description}>
+  <div class="container-wide py-10">
+    <div class="lg:grid lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[13rem_minmax(0,1fr)_12rem]">
+      {/* Sidebar — sticky on desktop, collapsible on mobile */}
+      <details class="group mb-6 rounded-lg border border-border bg-card lg:hidden">
+        <summary class="flex cursor-pointer items-center justify-between px-4 py-3 text-sm font-medium select-none">
+          Documentation menu
+          <Icon name="chevron-down" size={16} class="transition-transform group-open:rotate-180" />
+        </summary>
+        <div class="border-t border-border p-4">
+          <DocsSidebar groups={groups} />
+        </div>
+      </details>
+
+      <aside class="hidden lg:block">
+        <div class="sticky top-24 max-h-[calc(100dvh-8rem)] overflow-y-auto pr-2">
+          <DocsSidebar groups={groups} />
+        </div>
+      </aside>
+
+      <div class="min-w-0">
+        <header>
+          <p class="mb-2 font-mono text-xs font-medium tracking-wide text-accent uppercase">
+            {doc.data.group}
+          </p>
+          <h1 class="text-3xl font-semibold tracking-tight">{doc.data.title}</h1>
+          {
+            doc.data.description && (
+              <p class="mt-2 text-base text-muted-foreground">{doc.data.description}</p>
+            )
+          }
+        </header>
+
+        <div class="mt-6 xl:hidden">
+          <TableOfContents headings={headings} variant="mobile" />
+        </div>
+
+        <article class="prose mt-6 max-w-none" data-pagefind-body data-pagefind-filter="type:Docs">
+          <slot />
+        </article>
+
+        <nav class="mt-12 grid gap-4 border-t border-border/60 pt-6 sm:grid-cols-2" aria-label="Docs navigation">
+          {
+            prev ? (
+              <a
+                href={url(`/docs/${prev.id}`)}
+                rel="prev"
+                class="group rounded-xl border border-border bg-card/60 p-4 transition-colors hover:border-muted-foreground/30 hover:bg-card"
+              >
+                <span class="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Icon name="arrow-left" size={12} />
+                  Previous
+                </span>
+                <span class="mt-1.5 block text-sm font-medium transition-colors group-hover:text-accent">
+                  {prev.data.title}
+                </span>
+              </a>
+            ) : (
+              <span />
+            )
+          }
+          {
+            next && (
+              <a
+                href={url(`/docs/${next.id}`)}
+                rel="next"
+                class="group rounded-xl border border-border bg-card/60 p-4 text-right transition-colors hover:border-muted-foreground/30 hover:bg-card sm:col-start-2"
+              >
+                <span class="flex items-center justify-end gap-1 text-xs text-muted-foreground">
+                  Next
+                  <Icon name="arrow-right" size={12} />
+                </span>
+                <span class="mt-1.5 block text-sm font-medium transition-colors group-hover:text-accent">
+                  {next.data.title}
+                </span>
+              </a>
+            )
+          }
+        </nav>
+      </div>
+
+      {/* Right rail TOC */}
+      <aside class="hidden xl:block">
+        <div class="sticky top-24">
+          <TableOfContents headings={headings} variant="sidebar" />
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,67 @@
+---
+import { siteConfig } from '@/config/site';
+import { url } from '@/lib/utils';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  class?: string;
+  size?: number;
+  /** Include a mail icon linking to the author email */
+  withEmail?: boolean;
+  /** Include an RSS icon */
+  withRss?: boolean;
+}
+
+const { class: className, size = 17, withEmail = true, withRss = false } = Astro.props;
+
+const links: Array<{ name: string; href: string; icon: 'github' | 'linkedin' | 'twitter' | 'youtube' | 'mastodon' }> = [];
+if (siteConfig.social.twitter) links.push({ name: 'X / Twitter', href: siteConfig.social.twitter, icon: 'twitter' });
+if (siteConfig.social.linkedin) links.push({ name: 'LinkedIn', href: siteConfig.social.linkedin, icon: 'linkedin' });
+if (siteConfig.social.github) links.push({ name: 'GitHub', href: siteConfig.social.github, icon: 'github' });
+if (siteConfig.social.youtube) links.push({ name: 'YouTube', href: siteConfig.social.youtube, icon: 'youtube' });
+if (siteConfig.social.mastodon) links.push({ name: 'Mastodon', href: siteConfig.social.mastodon, icon: 'mastodon' });
+---
+
+<ul class:list={['flex items-center gap-1', className]}>
+  {
+    links.map((link) => (
+      <li>
+        <a
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={link.name}
+          class="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <Icon name={link.icon} size={size} />
+        </a>
+      </li>
+    ))
+  }
+  {
+    withEmail && (
+      <li>
+        <a
+          href={`mailto:${siteConfig.author.email}`}
+          aria-label="Email"
+          class="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <Icon name="mail" size={size} />
+        </a>
+      </li>
+    )
+  }
+  {
+    withRss && (
+      <li>
+        <a
+          href={url('/rss.xml')}
+          aria-label="RSS feed"
+          class="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <Icon name="rss" size={size} />
+        </a>
+      </li>
+    )
+  }
+</ul>

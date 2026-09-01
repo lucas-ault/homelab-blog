@@ -1,0 +1,60 @@
+---
+import { siteConfig } from '@/config/site';
+import { url } from '@/lib/utils';
+import SocialLinks from './SocialLinks.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-border/50">
+  <div class="container-page py-12">
+    <div class="flex flex-col justify-between gap-10 sm:flex-row">
+      <div class="max-w-xs">
+        <p class="text-sm font-semibold tracking-tight">{siteConfig.name}</p>
+        <p class="mt-2 text-sm leading-relaxed text-muted-foreground">
+          {siteConfig.footer.text}
+        </p>
+        <SocialLinks class="mt-4 -ml-2" withRss />
+      </div>
+
+      <nav aria-label="Footer navigation" class="grid grid-cols-2 gap-8 text-sm">
+        <div class="flex flex-col gap-2.5">
+          <p class="font-medium text-foreground">Pages</p>
+          {
+            siteConfig.navigation.map((item) => (
+              <a
+                href={url(item.href)}
+                class="text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </div>
+        <div class="flex flex-col gap-2.5">
+          <p class="font-medium text-foreground">More</p>
+          <a href={url('/uses')} class="text-muted-foreground transition-colors hover:text-foreground">Uses</a>
+          <a href={url('/resume')} class="text-muted-foreground transition-colors hover:text-foreground">Resume</a>
+          <a href={url('/contact')} class="text-muted-foreground transition-colors hover:text-foreground">Contact</a>
+          <a href={url('/tags')} class="text-muted-foreground transition-colors hover:text-foreground">Tags</a>
+          <a href={url('/rss.xml')} class="text-muted-foreground transition-colors hover:text-foreground">RSS</a>
+        </div>
+      </nav>
+    </div>
+
+    <div
+      class="mt-10 flex flex-col items-start justify-between gap-2 border-t border-border/50 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center"
+    >
+      <p>© {year} {siteConfig.author.name}. All rights reserved.</p>
+      <p>
+        Built with
+        <a
+          href="https://astro.build"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-medium text-foreground/80 transition-colors hover:text-foreground">Astro</a
+        >
+      </p>
+    </div>
+  </div>
+</footer>

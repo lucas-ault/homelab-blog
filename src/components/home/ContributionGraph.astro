@@ -1,0 +1,139 @@
+---
+/**
+ * GitHub contribution heatmap, rendered entirely at build time.
+ *
+ * Fetches the public contribution calendar for `siteConfig.github.username`
+ * (no token required). If the request fails — offline builds, rate limits —
+ * it falls back to deterministic placeholder data so the build never breaks.
+ * Data refreshes on every deploy.
+ */
+import { siteConfig } from '@/config/site';
+
+interface Day {
+  date: string;
+  count: number;
+  level: number;
+}
+
+const username = siteConfig.github.username;
+
+let days: Day[] = [];
+let isFallback = false;
+
+try {
+  const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`, {
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = (await res.json()) as { contributions: Day[] };
+  days = data.contributions;
+} catch {
+  // Deterministic placeholder: seeded PRNG so builds are reproducible.
+  isFallback = true;
+  let seed = 42;
+  const rand = () => {
+    seed = (seed * 16807) % 2147483647;
+    return seed / 2147483647;
+  };
+  const today = new Date();
+  for (let i = 364; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    const weekday = date.getDay();
+    const active = rand() > (weekday === 0 || weekday === 6 ? 0.55 : 0.3);
+    const count = active ? Math.floor(rand() * 12) : 0;
+    const level = count === 0 ? 0 : count < 3 ? 1 : count < 6 ? 2 : count < 9 ? 3 : 4;
+    days.push({ date: date.toISOString().split('T')[0] ?? '', count, level });
+  }
+}
+
+const total = days.reduce((sum, d) => sum + d.count, 0);
+
+// Group days into GitHub-style week columns (rows = Sun..Sat)
+const weeks: Array<Array<Day | null>> = [];
+let week: Array<Day | null> = [];
+if (days.length > 0) {
+  const firstWeekday = new Date(days[0]!.date).getDay();
+  for (let i = 0; i < firstWeekday; i++) week.push(null);
+}
+for (const day of days) {
+  week.push(day);
+  if (week.length === 7) {
+    weeks.push(week);
+    week = [];
+  }
+}
+if (week.length > 0) weeks.push(week);
+
+function formatTooltip(day: Day): string {
+  const date = new Date(day.date).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+  return `${day.count} contribution${day.count === 1 ? '' : 's'} on ${date}`;
+}
+---
+
+<div class="contribution-graph">
+  <div class="mb-3 flex items-baseline justify-between gap-4">
+    <p class="text-sm text-muted-foreground">
+      <span class="font-semibold text-foreground">{total.toLocaleString('en-US')} </span>
+      <span>contributions in the last year </span>
+      {isFallback && <span class="text-xs opacity-60">(sample data)</span>}
+    </p>
+    <a
+      href={`https://github.com/${username}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-xs text-muted-foreground transition-colors hover:text-accent"
+    >
+      @{username}
+    </a>
+  </div>
+
+  <div class="overflow-x-auto pb-1" tabindex="0" aria-label="GitHub contribution calendar">
+    <div class="flex w-max gap-[3px]" role="img" aria-label={`${total} GitHub contributions in the last year`}>
+      {
+        weeks.map((column) => (
+          <div class="flex flex-col gap-[3px]">
+            {column.map((day) =>
+              day ? (
+                <div class="cell" data-level={day.level} title={formatTooltip(day)} />
+              ) : (
+                <div class="size-[10px]" />
+              ),
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="mt-2 flex items-center justify-end gap-1.5 text-[0.6875rem] text-muted-foreground">
+    Less
+    {[0, 1, 2, 3, 4].map((level) => <div class="cell" data-level={level} />)}
+    More
+  </div>
+</div>
+
+<style>
+  .cell {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background-color: var(--muted);
+  }
+  .cell[data-level='1'] {
+    background-color: color-mix(in oklch, var(--accent) 30%, var(--muted));
+  }
+  .cell[data-level='2'] {
+    background-color: color-mix(in oklch, var(--accent) 55%, var(--muted));
+  }
+  .cell[data-level='3'] {
+    background-color: color-mix(in oklch, var(--accent) 80%, var(--muted));
+  }
+  .cell[data-level='4'] {
+    background-color: var(--accent);
+  }
+</style>

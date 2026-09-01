@@ -1,0 +1,211 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+@import './typography.css';
+
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-ring: var(--ring);
+  --color-code-bg: var(--code-bg);
+  --color-success: var(--success);
+
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --default-transition-duration: 200ms;
+}
+
+/* ---------------------------------- */
+/* Design tokens — light               */
+/* ---------------------------------- */
+:root {
+  --background: oklch(0.99 0.002 286);
+  --foreground: oklch(0.21 0.006 286);
+  --card: oklch(1 0 0);
+  --muted: oklch(0.955 0.002 286);
+  --muted-foreground: oklch(0.49 0.012 286);
+  --border: oklch(0.9 0.004 286);
+  --primary: oklch(0.21 0.006 286);
+  --primary-foreground: oklch(0.985 0 0);
+  --accent: oklch(0.54 0.22 293);
+  --accent-foreground: oklch(0.985 0 0);
+  --ring: oklch(0.54 0.22 293);
+  --code-bg: oklch(0.97 0.002 286);
+  --success: oklch(0.63 0.17 149);
+
+  color-scheme: light;
+}
+
+/* ---------------------------------- */
+/* Design tokens — dark (default)      */
+/* ---------------------------------- */
+.dark {
+  --background: oklch(0.148 0.004 286);
+  --foreground: oklch(0.92 0.004 286);
+  --card: oklch(0.185 0.005 286);
+  --muted: oklch(0.225 0.006 286);
+  --muted-foreground: oklch(0.65 0.012 286);
+  --border: oklch(0.268 0.006 286);
+  --primary: oklch(0.92 0.004 286);
+  --primary-foreground: oklch(0.165 0.005 286);
+  --accent: oklch(0.71 0.17 293.5);
+  --accent-foreground: oklch(0.165 0.005 286);
+  --ring: oklch(0.71 0.17 293.5);
+  --code-bg: oklch(0.172 0.004 286);
+  --success: oklch(0.72 0.19 149);
+
+  color-scheme: dark;
+}
+
+/* ---------------------------------- */
+/* Base                                */
+/* ---------------------------------- */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklch, var(--accent) 25%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  kbd {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    line-height: 1;
+    padding: 0.25rem 0.375rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--border);
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ---------------------------------- */
+/* Utilities                           */
+/* ---------------------------------- */
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 48rem;
+  padding-inline: 1.25rem;
+  @media (width >= 640px) {
+    padding-inline: 1.5rem;
+  }
+}
+
+@utility container-wide {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-inline: 1.25rem;
+  @media (width >= 640px) {
+    padding-inline: 1.5rem;
+  }
+}
+
+/* Fade-up entrance for hero/sections (disabled for reduced motion) */
+@utility animate-fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pulsing status dot (e.g. "Available", "Working") */
+@utility status-dot {
+  position: relative;
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--success);
+}
+
+.status-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background-color: var(--success);
+  animation: status-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes status-ping {
+  75%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* Print styles for the resume page */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+}

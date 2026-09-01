@@ -1,0 +1,43 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import CopyButton from '@/components/ui/CopyButton.astro';
+
+interface Props {
+  title: string;
+  url: string;
+}
+
+const { title, url } = Astro.props;
+
+const shareLinks = [
+  {
+    name: 'Share on X',
+    icon: 'twitter' as const,
+    href: `https://x.com/intent/post?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
+  },
+  {
+    name: 'Share on LinkedIn',
+    icon: 'linkedin' as const,
+    href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+  },
+];
+---
+
+<div class="flex items-center gap-1">
+  <span class="mr-1 text-xs text-muted-foreground">Share</span>
+  {
+    shareLinks.map((link) => (
+      <a
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={link.name}
+        title={link.name}
+        class="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+      >
+        <Icon name={link.icon} size={13} />
+      </a>
+    ))
+  }
+  <CopyButton text={url} label="Copy link" />
+</div>

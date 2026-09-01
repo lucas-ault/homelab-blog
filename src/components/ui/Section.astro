@@ -1,0 +1,37 @@
+---
+import { url } from '@/lib/utils';
+import Icon from './Icon.astro';
+
+interface Props {
+  title: string;
+  /** Optional "View all" style link (internal paths get the base prefix) */
+  href?: string;
+  linkLabel?: string;
+  class?: string;
+}
+
+const { title, href: rawHref, linkLabel = 'View all', class: className } = Astro.props;
+const href = rawHref?.startsWith('/') ? url(rawHref) : rawHref;
+---
+
+<section class:list={['mt-16 sm:mt-20', className]}>
+  <div class="mb-6 flex items-baseline justify-between">
+    <h2 class="text-lg font-semibold tracking-tight">{title}</h2>
+    {
+      href && (
+        <a
+          href={href}
+          class="group inline-flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-accent"
+        >
+          {linkLabel}
+          <Icon
+            name="arrow-right"
+            size={12}
+            class="transition-transform group-hover:translate-x-0.5"
+          />
+        </a>
+      )
+    }
+  </div>
+  <slot />
+</section>

@@ -1,0 +1,108 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+interface UsesItem {
+  name: string;
+  description: string;
+  url?: string;
+}
+
+const sections: Array<{ title: string; items: UsesItem[] }> = [
+  {
+    title: 'Homelab hardware',
+    items: [
+      { name: 'Proxmox VE', description: 'Primary hypervisor for the multi-node lab — VMs, LXC, and K3s worker nodes.', url: 'https://www.proxmox.com/en/proxmox-ve' },
+      { name: 'K3s nodes', description: 'A dedicated multi-node Kubernetes cluster for experimenting with production-style workloads.', url: 'https://k3s.io' },
+      { name: 'TrueNAS', description: 'Storage tier — apps, backups, and photo sync for the whole family.', url: 'https://www.truenas.com' },
+      { name: 'Tailscale', description: 'Connects the lab, home network, and me-wherever. MagicDNS and subnet routing do a lot of heavy lifting.', url: 'https://tailscale.com' },
+      { name: 'Network gear', description: 'Segmented VLANs for lab, IoT, and production traffic; VLAN-aware upstream router.' },
+    ],
+  },
+  {
+    title: 'Software & tooling',
+    items: [
+      { name: 'Cursor', description: 'Daily driver for automation scripts, infra-as-code, and this site.', url: 'https://cursor.com' },
+      { name: 'GitLab', description: 'CI/CD and PAC logic at work; GitOps pipeline definitions for the lab.', url: 'https://gitlab.com' },
+      { name: 'Python', description: 'The default for security automation, API glue, and anything with a loop.', url: 'https://python.org' },
+      { name: 'Home Assistant', description: 'Home automation hub — dashboards, automations, and integrations with the rest of the stack.', url: 'https://home-assistant.io' },
+      { name: 'Immich', description: 'Self-hosted photo library for family and friends.', url: 'https://immich.app' },
+    ],
+  },
+  {
+    title: 'Cloud & DevOps stack',
+    items: [
+      { name: 'Kubernetes (K3s)', description: 'Bare-metal cluster in the rack; workloads live in Helm charts.', url: 'https://kubernetes.io' },
+      { name: 'Helm + FluxCD', description: 'Charts define desired state; Flux reconciles it. Git is the source of truth.', url: 'https://fluxcd.io' },
+      { name: 'Docker', description: 'Image builds and local tooling.', url: 'https://www.docker.com' },
+      { name: 'Zscaler (ZIA / ZPA / ZDX)', description: 'The enterprise SASE stack I spend my working hours on.', url: 'https://www.zscaler.com' },
+      { name: 'PostgreSQL + Redis', description: 'Boring, reliable datastores for the multi-tenant platform I consult on.' },
+    ],
+  },
+  {
+    title: 'Workflow',
+    items: [
+      { name: 'GitOps with FluxCD', description: 'Merges to the desired-state repo trigger deploys; no manual kubectl in production.' },
+      { name: 'Validation gates in CI', description: 'Policy changes get automated validation, peer review, and a rollback path before they ship.' },
+      { name: 'Segregated dev and prod', description: 'Distinct release workflows for development and production, with encrypted config management.' },
+      { name: 'Runbooks for everything', description: 'If I do it by hand twice, it gets documented so the next on-call has a plan.' },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Uses"
+  description="Hardware, software, and the development stack I use every day."
+>
+  <div class="container-page py-10 sm:py-14">
+    <header>
+      <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Uses</h1>
+      <p class="mt-3 max-w-lg text-base leading-relaxed text-muted-foreground">
+        The hardware, software, and workflow behind my day-to-day work. Inspired by
+        <a
+          href="https://uses.tech"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-accent underline decoration-accent/40 underline-offset-3 hover:decoration-accent">uses.tech</a
+        >.
+      </p>
+    </header>
+
+    <div class="mt-10 space-y-12" data-pagefind-body>
+      {
+        sections.map((section) => (
+          <section>
+            <h2 class="mb-4 text-lg font-semibold tracking-tight">{section.title}</h2>
+            <ul class="divide-y divide-border/60 rounded-xl border border-border bg-card/60">
+              {section.items.map((item) => (
+                <li class="flex items-start justify-between gap-4 px-5 py-3.5">
+                  <div class="min-w-0">
+                    <p class="text-sm font-medium">
+                      {item.url ? (
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="inline-flex items-center gap-1.5 transition-colors hover:text-accent"
+                        >
+                          {item.name}
+                          <Icon name="external-link" size={12} class="text-muted-foreground" />
+                        </a>
+                      ) : (
+                        item.name
+                      )}
+                    </p>
+                    <p class="mt-0.5 text-sm leading-relaxed text-muted-foreground">
+                      {item.description}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

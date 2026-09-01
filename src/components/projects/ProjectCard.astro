@@ -1,0 +1,98 @@
+---
+import type { Project } from '@/lib/content';
+import { url } from '@/lib/utils';
+import Icon from '@/components/ui/Icon.astro';
+import Badge from '@/components/ui/Badge.astro';
+
+interface Props {
+  project: Project;
+  /** Hide the screenshot for a denser layout */
+  showImage?: boolean;
+}
+
+const { project, showImage = true } = Astro.props;
+const { data } = project;
+const href = url(`/projects/${project.id}`);
+
+const statusConfig = data.status
+  ? {
+      active: { label: 'Active', variant: 'success' as const, dot: true },
+      maintained: { label: 'Maintained', variant: 'accent' as const, dot: false },
+      archived: { label: 'Archived', variant: 'default' as const, dot: false },
+      'in-progress': { label: 'In progress', variant: 'outline' as const, dot: true },
+    }[data.status]
+  : null;
+---
+
+<article
+  class="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card/60 transition-colors hover:border-muted-foreground/30 hover:bg-card"
+>
+  {
+    showImage && data.image && (
+      <img
+        src={url(data.image)}
+        alt={`Screenshot of ${data.title}`}
+        width="1280"
+        height="720"
+        loading="lazy"
+        decoding="async"
+        class="aspect-video w-full border-b border-border object-cover"
+      />
+    )
+  }
+
+  <div class="flex flex-1 flex-col p-5">
+    <div class="flex items-center justify-between gap-3">
+      <h3 class="font-semibold tracking-tight">
+        <a href={href} class="after:absolute after:inset-0 transition-colors group-hover:text-accent">
+          {data.title}
+        </a>
+      </h3>
+      {statusConfig && <Badge variant={statusConfig.variant} dot={statusConfig.dot}>{statusConfig.label}</Badge>}
+    </div>
+
+    <p class="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+      {data.description}
+    </p>
+
+    <div class="mt-4 flex flex-wrap gap-1.5">
+      {
+        data.technologies.slice(0, 5).map((tech) => (
+          <span class="rounded-md bg-muted px-2 py-0.5 font-mono text-[0.6875rem] text-muted-foreground">
+            {tech}
+          </span>
+        ))
+      }
+    </div>
+
+    <div class="relative z-10 mt-4 flex items-center gap-1 border-t border-border/60 pt-3">
+      {
+        data.github && (
+          <a
+            href={data.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${data.title} on GitHub`}
+            class="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          >
+            <Icon name="github" size={14} />
+          </a>
+        )
+      }
+      {
+        data.demo && (
+          <a
+            href={data.demo}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Live demo of ${data.title}`}
+            class="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          >
+            <Icon name="external-link" size={14} />
+          </a>
+        )
+      }
+      <span class="ml-auto font-mono text-[0.6875rem] text-muted-foreground">{data.year}</span>
+    </div>
+  </div>
+</article>

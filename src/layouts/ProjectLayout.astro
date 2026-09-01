@@ -1,0 +1,147 @@
+---
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import { siteConfig } from '@/config/site';
+import type { Project } from '@/lib/content';
+import { breadcrumbSchema, absoluteUrl } from '@/lib/seo';
+import { url } from '@/lib/utils';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import TableOfContents from '@/components/blog/TableOfContents.astro';
+
+interface Props {
+  project: Project;
+  headings: MarkdownHeading[];
+}
+
+const { project, headings } = Astro.props;
+const { data } = project;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? siteConfig.url).toString();
+
+const statusConfig = data.status
+  ? {
+      active: { label: 'Active', variant: 'success' as const, dot: true },
+      maintained: { label: 'Maintained', variant: 'accent' as const, dot: false },
+      archived: { label: 'Archived', variant: 'default' as const, dot: false },
+      'in-progress': { label: 'In progress', variant: 'outline' as const, dot: true },
+    }[data.status]
+  : null;
+
+const jsonLd = [
+  breadcrumbSchema([
+    { name: 'Home', url: absoluteUrl('/') },
+    { name: 'Projects', url: absoluteUrl('/projects') },
+    { name: data.title, url: canonicalUrl },
+  ]),
+];
+---
+
+<BaseLayout title={data.title} description={data.description} image={data.image} jsonLd={jsonLd}>
+  <div class="container-page py-10 sm:py-14">
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Projects', href: '/projects' },
+        { label: data.title },
+      ]}
+    />
+
+    <header>
+      <div class="flex flex-wrap items-center gap-3">
+        <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">{data.title}</h1>
+        {statusConfig && <Badge variant={statusConfig.variant} dot={statusConfig.dot}>{statusConfig.label}</Badge>}
+      </div>
+      <p class="mt-3 text-base leading-relaxed text-muted-foreground sm:text-lg">
+        {data.description}
+      </p>
+
+      <div class="mt-4 flex flex-wrap gap-1.5">
+        {
+          data.technologies.map((tech) => (
+            <span class="rounded-md bg-muted px-2 py-1 font-mono text-xs text-muted-foreground">
+              {tech}
+            </span>
+          ))
+        }
+        <span class="rounded-md bg-muted px-2 py-1 font-mono text-xs text-muted-foreground">
+          {data.year}
+        </span>
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-2.5">
+        {
+          data.demo && (
+            <Button href={data.demo} external size="sm">
+              Live Demo
+              <Icon name="external-link" size={13} />
+            </Button>
+          )
+        }
+        {
+          data.github && (
+            <Button href={data.github} external variant="secondary" size="sm">
+              <Icon name="github" size={13} />
+              GitHub
+            </Button>
+          )
+        }
+        {
+          data.documentation && (
+            <Button href={data.documentation} external variant="secondary" size="sm">
+              <Icon name="file-text" size={13} />
+              Documentation
+            </Button>
+          )
+        }
+        {
+          data.npm && (
+            <Button href={data.npm} external variant="secondary" size="sm">
+              npm
+              <Icon name="external-link" size={13} />
+            </Button>
+          )
+        }
+      </div>
+
+      {
+        data.image && (
+          <img
+            src={url(data.image)}
+            alt={`Screenshot of ${data.title}`}
+            width="1400"
+            height="740"
+            class="mt-8 aspect-[1.9/1] w-full rounded-xl border border-border object-cover"
+          />
+        )
+      }
+    </header>
+
+    <div class="mt-8 xl:hidden">
+      <TableOfContents headings={headings} variant="mobile" />
+    </div>
+
+    <div class="relative">
+      <article class="prose mt-8 max-w-none" data-pagefind-body>
+        <slot />
+      </article>
+
+      <aside class="absolute top-0 left-full ml-8 hidden h-full w-52 xl:block">
+        <div class="sticky top-24">
+          <TableOfContents headings={headings} variant="sidebar" />
+        </div>
+      </aside>
+    </div>
+
+    <div class="mt-12 border-t border-border/60 pt-6">
+      <a
+        href={url('/projects')}
+        class="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-accent"
+      >
+        <Icon name="arrow-left" size={13} />
+        All projects
+      </a>
+    </div>
+  </div>
+</BaseLayout>

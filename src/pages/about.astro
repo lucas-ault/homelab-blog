@@ -1,0 +1,182 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { siteConfig } from '@/config/site';
+import { experience, philosophy } from '@/config/resume';
+import { personSchema } from '@/lib/seo';
+import { url } from '@/lib/utils';
+import Badge from '@/components/ui/Badge.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import SocialLinks from '@/components/layout/SocialLinks.astro';
+
+const { author } = siteConfig;
+---
+
+<BaseLayout
+  title="About"
+  description={`About ${author.name} — ${author.role} based in ${author.location}.`}
+  jsonLd={[personSchema()]}
+>
+  <div class="container-page py-10 sm:py-14" data-pagefind-body>
+    {/* Introduction */}
+    <section>
+      <div class="flex items-center gap-5">
+        <img
+          src={url(author.avatar)}
+          alt={`Portrait of ${author.name}`}
+          width="80"
+          height="80"
+          class="size-16 rounded-full border border-border bg-muted ring-2 ring-accent/25 ring-offset-2 ring-offset-background sm:size-20"
+        />
+        <div>
+          <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">{author.name}</h1>
+          <p class="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground">
+            <span>{author.role}</span>
+            <span aria-hidden="true" class="opacity-50">·</span>
+            <span class="inline-flex items-center gap-1">
+              <Icon name="map-pin" size={13} />
+              {author.location}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-6 max-w-xl space-y-4 text-sm leading-relaxed text-foreground/90">
+        <p>
+          I'm a senior cybersecurity engineer with 7+ years of experience securing enterprise
+          environments at scale. I care about Zero Trust architecture, automation that makes
+          changes safe, and boring reliable infrastructure that operations teams can actually
+          run.
+        </p>
+        <p>
+          Right now I engineer Zscaler for 250,000 global users at Raytheon Technologies and
+          consult on multi-tenant AI infrastructure at Bolt Box AI. Outside of work I run a
+          multi-node K3s/Proxmox homelab that hosts production services for family and friends.
+          When I have something worth writing down, it ends up on the
+          <a href={url('/blog')} class="text-accent underline decoration-accent/40 underline-offset-3 hover:decoration-accent">blog</a>.
+        </p>
+      </div>
+
+      <SocialLinks class="mt-5 -ml-2" />
+    </section>
+
+    {/* Experience timeline */}
+    <section class="mt-16">
+      <h2 class="text-lg font-semibold tracking-tight">Experience</h2>
+      <ol class="mt-6 space-y-8 border-l border-border pl-6">
+        {
+          experience.map((job) => (
+            <li class="relative">
+              <span
+                class:list={[
+                  'absolute top-1.5 -left-[1.85rem] size-2.5 rounded-full border-2 border-background',
+                  job.current ? 'bg-success' : 'bg-border',
+                ]}
+                aria-hidden="true"
+              />
+              <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-1">
+                <div>
+                  <h3 class="flex items-center gap-2.5 font-semibold tracking-tight">
+                    {job.company}
+                    {job.current && (
+                      <Badge variant="success" dot>
+                        Working
+                      </Badge>
+                    )}
+                  </h3>
+                  <p class="mt-0.5 text-sm text-muted-foreground">{job.position}</p>
+                </div>
+                <div class="text-right text-xs leading-relaxed text-muted-foreground">
+                  <p>
+                    {job.start} – {job.end ?? 'Present'}
+                  </p>
+                  <p>
+                    {job.location}
+                    {job.mode && ` (${job.mode})`}
+                  </p>
+                </div>
+              </div>
+              <p class="mt-2.5 max-w-xl text-sm leading-relaxed text-foreground/85">
+                {job.description}
+              </p>
+              <div class="mt-2.5 flex flex-wrap gap-1.5">
+                {job.technologies.map((tech) => (
+                  <span class="rounded-md bg-muted px-2 py-0.5 font-mono text-[0.6875rem] text-muted-foreground">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    {/* Skills */}
+    <section class="mt-16">
+      <h2 class="text-lg font-semibold tracking-tight">Skills</h2>
+      <div class="mt-6 space-y-5">
+        {
+          siteConfig.skills.map(({ category, items }) => (
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-baseline">
+              <p class="w-32 shrink-0 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                {category}
+              </p>
+              <div class="flex flex-wrap gap-1.5">
+                {items.map((skill) => (
+                  <span class="rounded-md border border-border bg-card px-2.5 py-1 font-mono text-xs text-foreground/90">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    {/* Philosophy */}
+    <section class="mt-16">
+      <h2 class="text-lg font-semibold tracking-tight">How I think about engineering</h2>
+      <div class="prose mt-4 max-w-xl">
+        {philosophy.trim().split('\n\n').map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </section>
+
+    {/* Contact CTA */}
+    <section class="mt-16">
+      <div class="rounded-2xl border border-border bg-card/60 p-8">
+        <h2 class="text-xl font-semibold tracking-tight">Want to work together?</h2>
+        <p class="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
+          I'm always happy to talk about interesting problems. Email is best.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2.5">
+          <Button href={`mailto:${author.email}`} size="sm">
+            <Icon name="mail" size={13} />
+            Email me
+          </Button>
+          {
+            siteConfig.social.github && (
+              <Button href={siteConfig.social.github} external variant="secondary" size="sm">
+                <Icon name="github" size={13} />
+                GitHub
+              </Button>
+            )
+          }
+          {
+            siteConfig.social.linkedin && (
+              <Button href={siteConfig.social.linkedin} external variant="secondary" size="sm">
+                <Icon name="linkedin" size={13} />
+                LinkedIn
+              </Button>
+            )
+          }
+          <Button href={url('/resume')} variant="secondary" size="sm">
+            <Icon name="file-text" size={13} />
+            Resume
+          </Button>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

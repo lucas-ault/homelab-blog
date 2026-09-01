@@ -1,0 +1,38 @@
+---
+/**
+ * Callout for Markdown/MDX content.
+ *
+ * ```mdx
+ * <Callout type="tip" title="Pro tip">Content here</Callout>
+ * ```
+ */
+import { cn } from '@/lib/utils';
+
+interface Props {
+  type?: 'note' | 'tip' | 'warning' | 'danger';
+  title?: string;
+}
+
+const { type = 'note', title } = Astro.props;
+
+const config = {
+  note: { label: 'Note', classes: 'border-accent/40 [--callout:var(--accent)]' },
+  tip: { label: 'Tip', classes: 'border-success/40 [--callout:var(--success)]' },
+  warning: { label: 'Warning', classes: 'border-amber-500/40 [--callout:oklch(0.77_0.16_70)]' },
+  danger: { label: 'Danger', classes: 'border-red-500/40 [--callout:oklch(0.64_0.21_25)]' },
+}[type];
+---
+
+<aside
+  class={cn(
+    'not-prose my-6 rounded-lg border border-l-4 bg-card px-4 py-3 text-sm leading-relaxed',
+    config.classes,
+  )}
+>
+  <p class="mb-1 font-semibold" style="color: var(--callout)">
+    {title ?? config.label}
+  </p>
+  <div class="text-foreground/90 [&_a]:text-accent [&_a]:underline [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.8125em]">
+    <slot />
+  </div>
+</aside>

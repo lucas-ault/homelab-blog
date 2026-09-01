@@ -1,0 +1,86 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getProjects } from '@/lib/content';
+import ProjectCard from '@/components/projects/ProjectCard.astro';
+
+const projects = await getProjects();
+const technologies = [...new Set(projects.flatMap((p) => p.data.technologies))].sort();
+---
+
+<BaseLayout
+  title="Projects"
+  description="Open-source projects, tools, and experiments — with source code and live demos."
+>
+  <div class="container-page py-10 sm:py-14">
+    <header>
+      <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Projects</h1>
+      <p class="mt-3 max-w-lg text-base leading-relaxed text-muted-foreground">
+        Open-source work, tools, and experiments. Most of it lives on GitHub — issues and pull
+        requests welcome.
+      </p>
+    </header>
+
+    {/* Technology filter — progressive enhancement, no page reload */}
+    <div class="mt-6 flex flex-wrap gap-1.5" id="project-filters">
+      <button
+        type="button"
+        data-filter=""
+        aria-pressed="true"
+        class="cursor-pointer rounded-md border border-border bg-card px-2.5 py-1 font-mono text-xs text-muted-foreground transition-colors aria-pressed:border-accent/60 aria-pressed:text-accent hover:text-foreground"
+      >
+        All
+      </button>
+      {
+        technologies.map((tech) => (
+          <button
+            type="button"
+            data-filter={tech}
+            aria-pressed="false"
+            class="cursor-pointer rounded-md border border-border bg-card px-2.5 py-1 font-mono text-xs text-muted-foreground transition-colors aria-pressed:border-accent/60 aria-pressed:text-accent hover:text-foreground"
+          >
+            {tech}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="mt-8 grid gap-5 sm:grid-cols-2" id="project-grid">
+      {
+        projects.map((project) => (
+          <div data-technologies={project.data.technologies.join('|')}>
+            <ProjectCard project={project} />
+          </div>
+        ))
+      }
+    </div>
+
+    <p id="project-empty" hidden class="mt-10 text-center text-sm text-muted-foreground">
+      No projects match this filter.
+    </p>
+  </div>
+</BaseLayout>
+
+<script>
+  function initProjectFilters() {
+    const filters = document.querySelectorAll<HTMLButtonElement>('#project-filters [data-filter]');
+    const cards = document.querySelectorAll<HTMLElement>('#project-grid [data-technologies]');
+    const empty = document.getElementById('project-empty');
+
+    filters.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter ?? '';
+        filters.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+
+        let visible = 0;
+        cards.forEach((card) => {
+          const match =
+            filter === '' || (card.dataset.technologies ?? '').split('|').includes(filter);
+          card.hidden = !match;
+          if (match) visible++;
+        });
+        if (empty) empty.hidden = visible > 0;
+      });
+    });
+  }
+  initProjectFilters();
+</script>

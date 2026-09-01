@@ -1,0 +1,95 @@
+---
+import { siteConfig } from '@/config/site';
+import { url } from '@/lib/utils';
+import Icon from '@/components/ui/Icon.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import MobileNav from './MobileNav.astro';
+
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+function isActive(href: string): boolean {
+  const target = url(href).replace(/\/$/, '') || '/';
+  if (href === '/') return pathname === target;
+  return pathname === target || pathname.startsWith(`${target}/`);
+}
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-md"
+>
+  <div class="container-page flex h-14 items-center justify-between gap-4">
+    <div class="flex items-center gap-6">
+      <a
+        href={url('/')}
+        class="flex items-center gap-2 text-sm font-semibold tracking-tight whitespace-nowrap text-foreground"
+      >
+        <span class="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <Icon name="terminal" size={13} />
+        </span>
+        {siteConfig.name}
+      </a>
+
+      <nav class="hidden items-center gap-1 md:flex" aria-label="Main navigation">
+        {
+          siteConfig.navigation.map((item) => (
+            <a
+              href={url(item.href)}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'rounded-lg px-3 py-1.5 text-sm transition-colors',
+                isActive(item.href)
+                  ? 'font-medium text-foreground'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+              ]}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-1.5">
+      {
+        siteConfig.features.search && (
+          <button
+            type="button"
+            data-search-open
+            class="hidden h-9 cursor-pointer items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm text-muted-foreground transition-colors hover:border-muted-foreground/40 hover:text-foreground sm:flex"
+          >
+            <Icon name="search" size={14} />
+            <span class="pr-4">Search</span>
+            <kbd class="hidden lg:inline">Ctrl K</kbd>
+          </button>
+        )
+      }
+      {
+        siteConfig.features.search && (
+          <button
+            type="button"
+            data-search-open
+            aria-label="Search"
+            class="inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:hidden"
+          >
+            <Icon name="search" size={17} />
+          </button>
+        )
+      }
+      {
+        siteConfig.social.github && (
+          <a
+            href={siteConfig.social.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub profile"
+            class="hidden size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:inline-flex"
+          >
+            <Icon name="github" size={17} />
+          </a>
+        )
+      }
+      <ThemeToggle />
+      <MobileNav />
+    </div>
+  </div>
+</header>

@@ -1,0 +1,111 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { siteConfig } from '@/config/site';
+import Button from '@/components/ui/Button.astro';
+import CopyButton from '@/components/ui/CopyButton.astro';
+import Icon from '@/components/ui/Icon.astro';
+import SocialLinks from '@/components/layout/SocialLinks.astro';
+
+const { author, contact } = siteConfig;
+---
+
+<BaseLayout title="Contact" description={`Get in touch with ${author.name}.`}>
+  <div class="container-page py-10 sm:py-14">
+    <header>
+      <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Contact</h1>
+      <p class="mt-3 max-w-lg text-base leading-relaxed text-muted-foreground">
+        Questions, project ideas, or just want to say hi? My inbox is open — I usually reply
+        within a couple of days.
+      </p>
+    </header>
+
+    <div class="mt-8 space-y-4">
+      {/* Email card */}
+      <div class="flex items-center justify-between gap-4 rounded-xl border border-border bg-card/60 p-5">
+        <div class="flex min-w-0 items-center gap-4">
+          <span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent/15 text-accent">
+            <Icon name="mail" size={18} />
+          </span>
+          <div class="min-w-0">
+            <p class="text-sm font-medium">Email</p>
+            <p class="truncate font-mono text-sm text-muted-foreground">{author.email}</p>
+          </div>
+        </div>
+        <div class="flex shrink-0 items-center gap-1">
+          <CopyButton text={author.email} label="Copy email address" />
+          <Button href={`mailto:${author.email}`} size="sm" variant="secondary">Write</Button>
+        </div>
+      </div>
+
+      {/* Socials card */}
+      <div class="flex items-center justify-between gap-4 rounded-xl border border-border bg-card/60 p-5">
+        <div class="flex items-center gap-4">
+          <span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent/15 text-accent">
+            <Icon name="link" size={18} />
+          </span>
+          <div>
+            <p class="text-sm font-medium">Elsewhere</p>
+            <p class="text-sm text-muted-foreground">GitHub, LinkedIn, X</p>
+          </div>
+        </div>
+        <SocialLinks withEmail={false} />
+      </div>
+    </div>
+
+    {
+      contact.formAction && (
+        <form
+          method="POST"
+          action={contact.formAction}
+          class="mt-10 space-y-5 rounded-xl border border-border bg-card/60 p-6"
+        >
+          <h2 class="text-lg font-semibold tracking-tight">Send a message</h2>
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div class="flex flex-col gap-1.5">
+              <label for="contact-name" class="text-sm font-medium">
+                Name
+              </label>
+              <input
+                id="contact-name"
+                name="name"
+                type="text"
+                required
+                autocomplete="name"
+                class="h-10 rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-accent"
+              />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label for="contact-email" class="text-sm font-medium">
+                Email
+              </label>
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                class="h-10 rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-accent"
+              />
+            </div>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label for="contact-message" class="text-sm font-medium">
+              Message
+            </label>
+            <textarea
+              id="contact-message"
+              name="message"
+              rows="5"
+              required
+              class="rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent"
+            />
+          </div>
+          <Button type="submit">
+            Send message
+            <Icon name="arrow-right" size={14} />
+          </Button>
+        </form>
+      )
+    }
+  </div>
+</BaseLayout>
