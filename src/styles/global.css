@@ -138,10 +138,13 @@
 @utility container-page {
   margin-inline: auto;
   width: 100%;
-  max-width: 48rem;
-  padding-inline: 1.25rem;
+  max-width: 72rem;
+  padding-inline: 1rem;
   @media (width >= 640px) {
     padding-inline: 1.5rem;
+  }
+  @media (width >= 1024px) {
+    padding-inline: 2rem;
   }
 }
 

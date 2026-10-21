@@ -7,7 +7,7 @@
  * it falls back to deterministic placeholder data so the build never breaks.
  * Data refreshes on every deploy.
  */
-import { siteConfig } from '@/config/site';
+import { siteConfig } from "@/config/site";
 
 interface Day {
   date: string;
@@ -21,9 +21,12 @@ let days: Day[] = [];
 let isFallback = false;
 
 try {
-  const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`, {
-    signal: AbortSignal.timeout(8000),
-  });
+  const res = await fetch(
+    `https://github-contributions-api.jogruber.de/v4/${username}?y=last`,
+    {
+      signal: AbortSignal.timeout(8000),
+    },
+  );
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = (await res.json()) as { contributions: Day[] };
   days = data.contributions;
@@ -42,8 +45,9 @@ try {
     const weekday = date.getDay();
     const active = rand() > (weekday === 0 || weekday === 6 ? 0.55 : 0.3);
     const count = active ? Math.floor(rand() * 12) : 0;
-    const level = count === 0 ? 0 : count < 3 ? 1 : count < 6 ? 2 : count < 9 ? 3 : 4;
-    days.push({ date: date.toISOString().split('T')[0] ?? '', count, level });
+    const level =
+      count === 0 ? 0 : count < 3 ? 1 : count < 6 ? 2 : count < 9 ? 3 : 4;
+    days.push({ date: date.toISOString().split("T")[0] ?? "", count, level });
   }
 }
 
@@ -66,19 +70,21 @@ for (const day of days) {
 if (week.length > 0) weeks.push(week);
 
 function formatTooltip(day: Day): string {
-  const date = new Date(day.date).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
+  const date = new Date(day.date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
   });
-  return `${day.count} contribution${day.count === 1 ? '' : 's'} on ${date}`;
+  return `${day.count} contribution${day.count === 1 ? "" : "s"} on ${date}`;
 }
 ---
 
 <div class="contribution-graph">
   <div class="mb-3 flex items-baseline justify-between gap-4">
     <p class="text-sm text-muted-foreground">
-      <span class="font-semibold text-foreground">{total.toLocaleString('en-US')} </span>
+      <span class="font-semibold text-foreground"
+        >{total.toLocaleString("en-US")}
+      </span>
       <span>contributions in the last year </span>
       {isFallback && <span class="text-xs opacity-60">(sample data)</span>}
     </p>
@@ -92,16 +98,29 @@ function formatTooltip(day: Day): string {
     </a>
   </div>
 
-  <div class="overflow-x-auto pb-1" tabindex="0" aria-label="GitHub contribution calendar">
-    <div class="flex w-max gap-[3px]" role="img" aria-label={`${total} GitHub contributions in the last year`}>
+  <div
+    class="graph-scroll"
+    tabindex="0"
+    aria-label="GitHub contribution calendar"
+  >
+    <div
+      class="graph-grid"
+      style={`--weeks: ${weeks.length}`}
+      role="img"
+      aria-label={`${total} GitHub contributions in the last year`}
+    >
       {
         weeks.map((column) => (
-          <div class="flex flex-col gap-[3px]">
+          <div class="graph-col">
             {column.map((day) =>
               day ? (
-                <div class="cell" data-level={day.level} title={formatTooltip(day)} />
+                <div
+                  class="cell"
+                  data-level={day.level}
+                  title={formatTooltip(day)}
+                />
               ) : (
-                <div class="size-[10px]" />
+                <div class="cell-slot" />
               ),
             )}
           </div>
@@ -110,7 +129,9 @@ function formatTooltip(day: Day): string {
     </div>
   </div>
 
-  <div class="mt-2 flex items-center justify-end gap-1.5 text-[0.6875rem] text-muted-foreground">
+  <div
+    class="mt-2 flex items-center justify-end gap-1.5 text-[0.6875rem] text-muted-foreground"
+  >
     Less
     {[0, 1, 2, 3, 4].map((level) => <div class="cell" data-level={level} />)}
     More
@@ -118,22 +139,59 @@ function formatTooltip(day: Day): string {
 </div>
 
 <style>
-  .cell {
+  .graph-scroll {
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+  .graph-grid {
+    display: flex;
+    width: max-content;
+    gap: 3px;
+  }
+  .graph-col {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .cell,
+  .cell-slot {
     width: 10px;
     height: 10px;
     border-radius: 2px;
+  }
+  .cell {
     background-color: var(--muted);
   }
-  .cell[data-level='1'] {
+  @media (width >= 768px) {
+    .graph-scroll {
+      overflow: visible;
+    }
+    .graph-grid {
+      display: grid;
+      width: 100%;
+      grid-template-columns: repeat(var(--weeks), minmax(0, 1fr));
+    }
+    .graph-col {
+      display: grid;
+      grid-template-rows: repeat(7, minmax(0, 1fr));
+    }
+    .graph-col .cell,
+    .graph-col .cell-slot {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
+    }
+  }
+  .cell[data-level="1"] {
     background-color: color-mix(in oklch, var(--accent) 30%, var(--muted));
   }
-  .cell[data-level='2'] {
+  .cell[data-level="2"] {
     background-color: color-mix(in oklch, var(--accent) 55%, var(--muted));
   }
-  .cell[data-level='3'] {
+  .cell[data-level="3"] {
     background-color: color-mix(in oklch, var(--accent) 80%, var(--muted));
   }
-  .cell[data-level='4'] {
+  .cell[data-level="4"] {
     background-color: var(--accent);
   }
 </style>

@@ -57,10 +57,10 @@ const { author, hero } = siteConfig;
         </div>
       </div>
 
-      <p class="mt-5 max-w-xl text-lg leading-relaxed text-balance">
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-balance">
         {hero.tagline}
       </p>
-      <p class="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
+      <p class="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
         {hero.intro}
       </p>
 
@@ -84,7 +84,12 @@ const { author, hero } = siteConfig;
       hasFeatured && (
         <Section title="Featured">
           {featuredProjects.length > 0 && (
-            <div class="grid gap-4 sm:grid-cols-2">
+            <div
+              class:list={[
+                "grid gap-4",
+                featuredProjects.length > 1 ? "sm:grid-cols-2" : "max-w-3xl",
+              ]}
+            >
               {featuredProjects.map((project) => (
                 <ProjectCard project={project} />
               ))}
@@ -110,7 +115,12 @@ const { author, hero } = siteConfig;
     {
       recentProjects.length > 0 && (
         <Section title="Recent projects" href="/projects">
-          <div class="grid gap-4 sm:grid-cols-2">
+          <div
+            class:list={[
+              "grid gap-4",
+              recentProjects.length > 1 ? "sm:grid-cols-2" : "max-w-3xl",
+            ]}
+          >
             {recentProjects.map((project) => (
               <ProjectCard project={project} />
             ))}

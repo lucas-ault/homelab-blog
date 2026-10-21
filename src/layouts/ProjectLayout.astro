@@ -126,19 +126,19 @@ const jsonLd = [
       }
     </header>
 
-    <div class="mt-8 xl:hidden">
+    <div class="mt-8 lg:hidden">
       <TableOfContents headings={headings} variant="mobile" />
     </div>
 
-    <div class="relative">
-      <article class="prose mt-8 max-w-none" data-pagefind-body>
+    <div
+      class="mt-8 lg:grid lg:grid-cols-[minmax(0,1fr)_13rem] lg:items-start lg:gap-12"
+    >
+      <article class="prose min-w-0 max-w-[68ch]" data-pagefind-body>
         <slot />
       </article>
 
-      <aside class="absolute top-0 left-full ml-8 hidden h-full w-52 xl:block">
-        <div class="sticky top-24">
-          <TableOfContents headings={headings} variant="sidebar" />
-        </div>
+      <aside class="sticky top-24 hidden lg:block">
+        <TableOfContents headings={headings} variant="sidebar" />
       </aside>
     </div>
 

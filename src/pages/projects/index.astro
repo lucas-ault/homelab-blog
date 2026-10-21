@@ -56,7 +56,13 @@ const technologies = [
             ))}
           </div>
 
-          <div class="mt-8 grid gap-5 sm:grid-cols-2" id="project-grid">
+          <div
+            class:list={[
+              "mt-8 grid gap-5",
+              projects.length > 1 ? "sm:grid-cols-2" : "max-w-3xl",
+            ]}
+            id="project-grid"
+          >
             {projects.map((project) => (
               <div data-technologies={project.data.technologies.join("|")}>
                 <ProjectCard project={project} />
