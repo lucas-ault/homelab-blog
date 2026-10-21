@@ -15,7 +15,7 @@ technologies:
 type: "Personal"
 status: "active"
 year: 2026
-featured: true
+featured: false
 draft: false
 ---
 
