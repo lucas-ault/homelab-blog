@@ -1,7 +1,7 @@
-@import 'tailwindcss';
-@import '@fontsource-variable/inter';
-@import '@fontsource-variable/jetbrains-mono';
-@import './typography.css';
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+@import "./typography.css";
 
 @plugin "@tailwindcss/typography";
 
@@ -22,8 +22,10 @@
   --color-code-bg: var(--code-bg);
   --color-success: var(--success);
 
-  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans:
+    "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:
+    "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --default-transition-duration: 200ms;
 }
@@ -166,33 +168,6 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* Pulsing status dot (e.g. "Available", "Working") */
-@utility status-dot {
-  position: relative;
-  display: inline-block;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 9999px;
-  background-color: var(--success);
-}
-
-.status-dot::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  background-color: var(--success);
-  animation: status-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-@keyframes status-ping {
-  75%,
-  100% {
-    transform: scale(2.2);
-    opacity: 0;
   }
 }
 

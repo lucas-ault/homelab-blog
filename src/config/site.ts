@@ -91,7 +91,6 @@ export interface SiteConfig {
   features: {
     blog: boolean;
     projects: boolean;
-    docs: boolean;
     search: boolean;
     githubActivity: boolean;
     newsletter: boolean;
@@ -100,72 +99,96 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: 'Lucas Ault',
-  title: 'Lucas Ault — Senior Cybersecurity Engineer',
+  name: "Lucas Ault",
+  title: "Lucas Ault — Principal Specialist, AI/Cyber Defense at RTX",
   description:
-    'Senior cybersecurity engineer driving secure access modernization with Zero Trust and automation. Writing about SASE, Zscaler, DevSecOps, and homelab experiments.',
-  url: 'https://lucasault.com',
-  locale: 'en_US',
+    "Lucas Ault. Dev Ops, security and AI at work. At home, a homelab, photography, too many unfinished projects, and whatever else piques my interest..",
+  url: "https://lucas.ault.cc",
+  locale: "en_US",
 
   author: {
-    name: 'Lucas Ault',
-    email: 'lucas@lucasault.com',
-    avatar: '/images/avatar.svg',
-    role: 'Senior Cybersecurity Engineer',
-    location: 'La Verne, CA',
+    name: "Lucas Ault",
+    email: "lucas@lucasault.com",
+    avatar: "/images/avatar.jpeg",
+    role: "Principal Specialist, AI/Cyber Defense at RTX",
+    location: "Greater Los Angeles, CA",
   },
 
   social: {
-    github: 'https://github.com/lucas-ault',
-    linkedin: 'https://www.linkedin.com/in/lucas-ault',
+    github: "https://github.com/lucas-ault",
+    linkedin: "https://www.linkedin.com/in/lucas-ault",
   },
 
   github: {
-    username: 'lucas-ault',
-    repoUrl: 'https://github.com/lucas-ault',
+    username: "lucas-ault",
+    repoUrl: "https://github.com/lucas-ault",
   },
 
   navigation: [
-    { label: 'Home', href: '/' },
-    { label: 'Blog', href: '/blog' },
-    { label: 'Projects', href: '/projects' },
-    { label: 'Docs', href: '/docs' },
-    { label: 'About', href: '/about' },
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
+    { label: "Projects", href: "/projects" },
+    { label: "About", href: "/about" },
   ],
 
   hero: {
-    tagline: 'Zero Trust architect by day, homelab operator by night.',
+    tagline: "Some guy with too many projects and not enough time.",
     intro:
-      'I secure enterprise environments at scale — 4 years engineering Zscaler for 250,000 global users in 24x7 production — and automate the boring parts with CI/CD so changes ship safely.',
-    primaryCta: { label: 'View Projects', href: '/projects' },
-    secondaryCta: { label: 'Read Blog', href: '/blog' },
+      "I am a CIS graduate from Cal Poly Pomona that loves to tinker with tech. I focus on AI, Cyber Defense, and Dev Ops at my day job - and for some reason, I do the same thing at home. When I am not overcomplicating my home network, I like to ride mountain and gravel bikes, shoot photos, and work on too many projects that I might never fully finish (I am talking about you, shelf of raspberry pis and LoRa radios etc...)",
+    primaryCta: { label: "View Projects", href: "/projects" },
+    secondaryCta: { label: "Read Blog", href: "/blog" },
     status: null,
   },
 
   stats: [
-    { label: 'Years in cybersecurity', value: '7+' },
-    { label: 'Users secured', value: '250k' },
-    { label: 'Enterprise tenants', value: '4' },
-    { label: 'Certifications', value: '7' },
+    { label: "Years in technology", value: "7+" },
+    { label: "Zscaler users", value: "250k" },
+    { label: "Enterprise tenants", value: "4" },
+    { label: "Certifications", value: "7" },
   ],
 
   skills: [
     {
-      category: 'Zero Trust & SASE',
-      items: ['Zscaler ZIA', 'Zscaler ZPA', 'Zscaler ZDX', 'PAC Policy', 'Secure Web Gateway'],
+      category: "AI & ML",
+      items: [
+        "Generative AI",
+        "RAG",
+        "Agentic Workflows",
+        "Multi-Agent Systems",
+        "MLOps",
+        "Model Evaluation",
+        "Prompt Engineering",
+        "Vectorless RAG",
+      ],
     },
     {
-      category: 'Cloud & DevOps',
-      items: ['Kubernetes', 'Docker', 'Helm', 'FluxCD', 'GitLab CI/CD', 'GHCR'],
+      category: "Zero Trust & SASE",
+      items: [
+        "Zscaler ZIA",
+        "Zscaler ZPA",
+        "Zscaler ZDX",
+        "PAC Policy",
+        "Secure Web Gateway",
+      ],
     },
-    { category: 'Languages', items: ['Python', 'JavaScript', 'YAML'] },
     {
-      category: 'Infrastructure',
-      items: ['Proxmox', 'ESXi', 'K3s', 'Networking', 'DNS', 'VPNs'],
+      category: "Cloud & DevOps",
+      items: ["Kubernetes", "Docker", "Helm", "FluxCD", "GitLab CI/CD", "GHCR"],
+    },
+    { category: "Languages", items: ["Python", "JavaScript", "YAML"] },
+    {
+      category: "Infrastructure",
+      items: ["Proxmox", "ESXi", "K3s", "Networking", "DNS", "VPNs"],
     },
     {
-      category: 'Homelab Stack',
-      items: ['Home Assistant', 'TrueNAS', 'Immich', 'Tailscale', 'Self-hosted AI inference'],
+      category: "Homelab Stack",
+      items: [
+        "Home Assistant",
+        "TrueNAS",
+        "Immich",
+        "Tailscale",
+        "Self-hosted AI inference",
+      ],
     },
   ],
 
@@ -179,17 +202,16 @@ export const siteConfig: SiteConfig = {
   },
 
   resume: {
-    pdfFile: '/resume.pdf',
+    pdfFile: "/resume.pdf",
   },
 
   footer: {
-    text: 'Cybersecurity engineering, Zero Trust architecture, and homelab experiments. Built with Astro.',
+    text: "Notes on security, AI, and the homelab.",
   },
 
   features: {
     blog: true,
     projects: true,
-    docs: true,
     search: true,
     githubActivity: true,
     newsletter: false,

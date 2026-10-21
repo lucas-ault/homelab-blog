@@ -1,0 +1,29 @@
+# Lucas Ault
+
+> Principal Specialist, AI/Cyber Defense at RTX. Notes on security, AI, and a homelab.
+
+## About
+
+Lucas Ault works on AI and cyber defense at RTX. He spent about four years running Zscaler for 250,000 users. This site is notes on that work, plus whatever he is building at home.
+
+## Pages
+
+- [/](https://lucas.ault.cc/): Homepage
+- [/blog](https://lucas.ault.cc/blog): Posts on security, AI, and the homelab
+- [/projects](https://lucas.ault.cc/projects): Project writeups
+- [/about](https://lucas.ault.cc/about): Experience, education, certifications, and how I think about the work
+- [/uses](https://lucas.ault.cc/uses): Hardware, software, and habits
+- [/contact](https://lucas.ault.cc/contact): Email and social links
+- [/attributions](https://lucas.ault.cc/attributions): Credits for the theme, tools, and fonts
+- [/search](https://lucas.ault.cc/search): Search posts and projects
+
+## Links
+
+- [GitHub](https://github.com/lucas-ault)
+- [LinkedIn](https://www.linkedin.com/in/lucas-ault)
+- [RSS Feed](https://lucas.ault.cc/rss.xml)
+- [Site Source Code](https://github.com/lucas-ault/homelab-blog)
+
+## Tech Stack
+
+Built with Astro 7, Tailwind CSS 4, Expressive Code, Pagefind, and Fontsource (Inter + JetBrains Mono). Static site, ~5KB JS per page. Forked from [astro-dev-theme](https://github.com/milinddethe15/astro-dev-theme) (MIT).

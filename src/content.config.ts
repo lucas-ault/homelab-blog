@@ -1,8 +1,8 @@
-import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
 
 const blog = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/blog' }),
+  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/blog" }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -18,7 +18,10 @@ const blog = defineCollection({
 });
 
 const projects = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/projects' }),
+  loader: glob({
+    pattern: "**/[^_]*.{md,mdx}",
+    base: "./src/content/projects",
+  }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -28,25 +31,16 @@ const projects = defineCollection({
     demo: z.url().optional(),
     documentation: z.url().optional(),
     npm: z.url().optional(),
-    type: z.enum(['Open Source', 'SaaS', 'Client Work', 'Personal', 'Experiment']).optional(),
-    status: z.enum(['active', 'maintained', 'archived', 'in-progress']).optional(),
+    type: z
+      .enum(["Open Source", "SaaS", "Client Work", "Personal", "Experiment"])
+      .optional(),
+    status: z
+      .enum(["active", "maintained", "archived", "in-progress"])
+      .optional(),
     year: z.number(),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),
 });
 
-const docs = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/docs' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    /** Sidebar group heading */
-    group: z.string().default('Guides'),
-    /** Sort order within the group */
-    order: z.number().default(99),
-    draft: z.boolean().default(false),
-  }),
-});
-
-export const collections = { blog, projects, docs };
+export const collections = { blog, projects };

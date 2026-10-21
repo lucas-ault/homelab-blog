@@ -1,17 +1,18 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getAllTags } from '@/lib/content';
-import { url } from '@/lib/utils';
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getAllTags } from "@/lib/content";
+import { url } from "@/lib/utils";
 
 const tags = await getAllTags();
 ---
 
-<BaseLayout title="Tags" description="Browse all article topics and tags.">
+<BaseLayout title="Tags" description="Browse posts by topic.">
   <div class="container-page py-10 sm:py-14">
     <header>
       <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Tags</h1>
       <p class="mt-3 text-base leading-relaxed text-muted-foreground">
-        {tags.length} topics across all articles.
+        {tags.length}
+        {tags.length === 1 ? "topic" : "topics"} from the posts.
       </p>
     </header>
 
@@ -28,7 +29,7 @@ const tags = await getAllTags();
                 {tag}
               </span>
               <span class="shrink-0 text-xs text-muted-foreground">
-                {count} {count === 1 ? 'post' : 'posts'}
+                {count} {count === 1 ? "post" : "posts"}
               </span>
             </a>
           </li>

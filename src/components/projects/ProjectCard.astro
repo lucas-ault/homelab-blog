@@ -1,8 +1,7 @@
 ---
-import type { Project } from '@/lib/content';
-import { url } from '@/lib/utils';
-import Icon from '@/components/ui/Icon.astro';
-import Badge from '@/components/ui/Badge.astro';
+import type { Project } from "@/lib/content";
+import { url } from "@/lib/utils";
+import Icon from "@/components/ui/Icon.astro";
 
 interface Props {
   project: Project;
@@ -13,15 +12,6 @@ interface Props {
 const { project, showImage = true } = Astro.props;
 const { data } = project;
 const href = url(`/projects/${project.id}`);
-
-const statusConfig = data.status
-  ? {
-      active: { label: 'Active', variant: 'success' as const, dot: true },
-      maintained: { label: 'Maintained', variant: 'accent' as const, dot: false },
-      archived: { label: 'Archived', variant: 'default' as const, dot: false },
-      'in-progress': { label: 'In progress', variant: 'outline' as const, dot: true },
-    }[data.status]
-  : null;
 ---
 
 <article
@@ -44,28 +34,36 @@ const statusConfig = data.status
   <div class="flex flex-1 flex-col p-5">
     <div class="flex items-center justify-between gap-3">
       <h3 class="font-semibold tracking-tight">
-        <a href={href} class="after:absolute after:inset-0 transition-colors group-hover:text-accent">
+        <a
+          href={href}
+          class="after:absolute after:inset-0 transition-colors group-hover:text-accent"
+        >
           {data.title}
         </a>
       </h3>
-      {statusConfig && <Badge variant={statusConfig.variant} dot={statusConfig.dot}>{statusConfig.label}</Badge>}
     </div>
 
-    <p class="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+    <p
+      class="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-muted-foreground"
+    >
       {data.description}
     </p>
 
     <div class="mt-4 flex flex-wrap gap-1.5">
       {
-        data.technologies.slice(0, 5).map((tech) => (
-          <span class="rounded-md bg-muted px-2 py-0.5 font-mono text-[0.6875rem] text-muted-foreground">
-            {tech}
-          </span>
-        ))
+        data.technologies
+          .slice(0, 5)
+          .map((tech) => (
+            <span class="rounded-md bg-muted px-2 py-0.5 font-mono text-[0.6875rem] text-muted-foreground">
+              {tech}
+            </span>
+          ))
       }
     </div>
 
-    <div class="relative z-10 mt-4 flex items-center gap-1 border-t border-border/60 pt-3">
+    <div
+      class="relative z-10 mt-4 flex items-center gap-1 border-t border-border/60 pt-3"
+    >
       {
         data.github && (
           <a
@@ -92,7 +90,9 @@ const statusConfig = data.status
           </a>
         )
       }
-      <span class="ml-auto font-mono text-[0.6875rem] text-muted-foreground">{data.year}</span>
+      <span class="ml-auto font-mono text-[0.6875rem] text-muted-foreground"
+        >{data.year}</span
+      >
     </div>
   </div>
 </article>

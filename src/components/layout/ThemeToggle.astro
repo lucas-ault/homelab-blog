@@ -1,5 +1,5 @@
 ---
-import Icon from '@/components/ui/Icon.astro';
+import Icon from "@/components/ui/Icon.astro";
 ---
 
 <button
@@ -14,10 +14,13 @@ import Icon from '@/components/ui/Icon.astro';
 
 <script>
   function initThemeToggle() {
-    const button = document.getElementById('theme-toggle');
-    button?.addEventListener('click', () => {
-      const isDark = document.documentElement.classList.toggle('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    const button = document.getElementById("theme-toggle");
+    button?.addEventListener("click", () => {
+      const isDark = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute("content", isDark ? "#131316" : "#fcfcfd");
     });
   }
   initThemeToggle();

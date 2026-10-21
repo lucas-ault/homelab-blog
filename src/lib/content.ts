@@ -1,16 +1,19 @@
-import { getCollection, type CollectionEntry } from 'astro:content';
-import { slugify } from './utils';
+import { getCollection, type CollectionEntry } from "astro:content";
+import { slugify } from "./utils";
 
-export type Post = CollectionEntry<'blog'>;
-export type Project = CollectionEntry<'projects'>;
-export type Doc = CollectionEntry<'docs'>;
+export type Post = CollectionEntry<"blog">;
+export type Project = CollectionEntry<"projects">;
 
 const isProd = import.meta.env.PROD;
 
 /** All published posts, newest first. Drafts are excluded in production builds. */
 export async function getPosts(): Promise<Post[]> {
-  const posts = await getCollection('blog', ({ data }) => (isProd ? !data.draft : true));
-  return posts.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+  const posts = await getCollection("blog", ({ data }) =>
+    isProd ? !data.draft : true,
+  );
+  return posts.sort(
+    (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+  );
 }
 
 export async function getFeaturedPosts(limit = 3): Promise<Post[]> {
@@ -21,7 +24,9 @@ export async function getFeaturedPosts(limit = 3): Promise<Post[]> {
 
 /** All published projects: featured first, then by year descending. */
 export async function getProjects(): Promise<Project[]> {
-  const projects = await getCollection('projects', ({ data }) => (isProd ? !data.draft : true));
+  const projects = await getCollection("projects", ({ data }) =>
+    isProd ? !data.draft : true,
+  );
   return projects.sort((a, b) => {
     if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
     return b.data.year - a.data.year;
@@ -34,21 +39,12 @@ export async function getFeaturedProjects(limit = 4): Promise<Project[]> {
   return (featured.length > 0 ? featured : projects).slice(0, limit);
 }
 
-export async function getDocs(): Promise<Doc[]> {
-  const docs = await getCollection('docs', ({ data }) => (isProd ? !data.draft : true));
-  return docs.sort((a, b) => a.data.order - b.data.order);
-}
-
-/** Docs grouped for the sidebar, preserving order within groups. */
-export async function getDocsGroups(): Promise<Array<{ group: string; items: Doc[] }>> {
-  const docs = await getDocs();
-  const groups = new Map<string, Doc[]>();
-  for (const doc of docs) {
-    const list = groups.get(doc.data.group) ?? [];
-    list.push(doc);
-    groups.set(doc.data.group, list);
-  }
-  return [...groups.entries()].map(([group, items]) => ({ group, items }));
+/** Most recent projects by year, whether or not they are featured. */
+export async function getRecentProjects(limit = 4): Promise<Project[]> {
+  const projects = await getCollection("projects", ({ data }) =>
+    isProd ? !data.draft : true,
+  );
+  return projects.sort((a, b) => b.data.year - a.data.year).slice(0, limit);
 }
 
 export interface TagInfo {
@@ -84,7 +80,10 @@ export async function getAdjacentPosts(
   const index = posts.findIndex((p) => p.id === post.id);
   return {
     next: index > 0 ? (posts[index - 1] ?? null) : null,
-    prev: index >= 0 && index < posts.length - 1 ? (posts[index + 1] ?? null) : null,
+    prev:
+      index >= 0 && index < posts.length - 1
+        ? (posts[index + 1] ?? null)
+        : null,
   };
 }
 
@@ -94,7 +93,10 @@ export async function getRelatedPosts(post: Post, limit = 3): Promise<Post[]> {
   const tags = new Set(post.data.tags);
   return posts
     .filter((p) => p.id !== post.id)
-    .map((p) => ({ post: p, score: p.data.tags.filter((t) => tags.has(t)).length }))
+    .map((p) => ({
+      post: p,
+      score: p.data.tags.filter((t) => tags.has(t)).length,
+    }))
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)

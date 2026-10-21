@@ -1,0 +1,39 @@
+---
+title: "Post Title"
+description: "A one-line summary for SEO, RSS, and article cards."
+publishedAt: 2026-09-17
+tags: ["Zero Trust", "Zscaler"]
+category: "Security"
+# image: '/images/posts/my-post.png'  # optional OG/card image
+featured: false
+draft: true
+---
+
+Write your post here. Markdown and MDX are both supported.
+
+## Frontmatter reference
+
+| Field         | Type     | Required | Notes                                                 |
+| ------------- | -------- | -------- | ----------------------------------------------------- |
+| `title`       | string   | yes      |                                                       |
+| `description` | string   | yes      | Shows in RSS, OG tags, and article cards              |
+| `publishedAt` | date     | yes      | `YYYY-MM-DD` — sorts newest first                     |
+| `updatedAt`   | date     | no       |                                                       |
+| `tags`        | string[] | no       | Used for tag pages and related posts                  |
+| `category`    | string   | no       | Displayed on article cards                            |
+| `image`       | string   | no       | Path in /public for the social card image             |
+| `featured`    | boolean  | no       | Featured posts show first (default: false)            |
+| `draft`       | boolean  | no       | Hidden in production, visible in dev (default: false) |
+
+## MDX components
+
+Available without imports in `.mdx` files:
+
+<Callout type="tip">
+  Callouts come in four types: `tip`, `note`, `warning`, `danger`.
+</Callout>
+
+<Tabs tabs={["tab 1", "tab 2"]}>
+  <div>Content for tab 1</div>
+  <div>Content for tab 2</div>
+</Tabs>

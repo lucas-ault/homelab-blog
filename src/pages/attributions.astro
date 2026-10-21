@@ -1,0 +1,246 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Icon from "@/components/ui/Icon.astro";
+
+interface Credit {
+  name: string;
+  description: string;
+  url: string;
+  license?: string;
+}
+
+const theme: Credit = {
+  name: "astro-dev-theme",
+  description:
+    "The theme I forked. Dark, pretty minimal, with a blog, projects, and search already in place.",
+  url: "https://github.com/milinddethe15/astro-dev-theme",
+  license: "MIT",
+};
+
+const author = {
+  name: "Milind Dethe",
+  url: "https://github.com/milinddethe15",
+};
+
+const technologies: Credit[] = [
+  {
+    name: "Astro",
+    description:
+      "The framework. Mostly static HTML, with islands if a page needs them.",
+    url: "https://astro.build",
+    license: "MIT",
+  },
+  {
+    name: "Tailwind CSS",
+    description: "All the styling goes through this.",
+    url: "https://tailwindcss.com",
+    license: "MIT",
+  },
+  {
+    name: "Expressive Code",
+    description: "Code blocks, with copy buttons, line numbers, and diffs.",
+    url: "https://expressive-code.com",
+    license: "MIT",
+  },
+  {
+    name: "Pagefind",
+    description:
+      "Search. The index is built with the site, so there is no search server.",
+    url: "https://pagefind.app",
+    license: "MIT",
+  },
+  {
+    name: "Fontsource",
+    description: "Fonts, hosted here instead of loading them from Google.",
+    url: "https://fontsource.org",
+    license: "SIL OFL 1.1",
+  },
+];
+
+const assets: Credit[] = [
+  {
+    name: "Inter",
+    description: "Body and UI typeface, designed by Rasmus Andersson.",
+    url: "https://rsms.me/inter",
+    license: "SIL OFL 1.1",
+  },
+  {
+    name: "JetBrains Mono",
+    description: "Monospace typeface for code blocks, by JetBrains.",
+    url: "https://www.jetbrains.com/lp/mono",
+    license: "SIL OFL 1.1",
+  },
+];
+---
+
+<BaseLayout
+  title="Attributions"
+  description="Who made the theme, tools, and fonts this site uses."
+>
+  <div class="container-page py-10 sm:py-14" data-pagefind-body>
+    <header>
+      <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">
+        Attributions
+      </h1>
+      <p class="mt-3 max-w-lg text-base leading-relaxed text-muted-foreground">
+        Credit where it's due. The theme, the tools, and the fonts.
+      </p>
+    </header>
+
+    {/* Theme */}
+    <section class="mt-10">
+      <h2 class="text-lg font-semibold tracking-tight">Theme</h2>
+      <div class="mt-4 rounded-xl border border-border bg-card/60 p-6">
+        <div
+          class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1"
+        >
+          <a
+            href={theme.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-medium transition-colors hover:text-accent"
+          >
+            {theme.name}
+            <Icon
+              name="external-link"
+              size={12}
+              class="ml-1.5 inline text-muted-foreground"
+            />
+          </a>
+          {
+            theme.license && (
+              <span class="font-mono text-xs text-muted-foreground">
+                {theme.license}
+              </span>
+            )
+          }
+        </div>
+        <p class="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
+          {theme.description}
+        </p>
+        <p class="mt-3 text-sm text-muted-foreground">
+          Created by
+          <a
+            href={author.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-foreground/80 transition-colors hover:text-accent"
+            >{author.name}</a
+          >. The original theme docs are available on
+          <a
+            href="https://github.com/milinddethe15/astro-dev-theme"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-foreground/80 transition-colors hover:text-accent"
+            >GitHub</a
+          >.
+        </p>
+      </div>
+    </section>
+
+    {/* Technologies */}
+    <section class="mt-10">
+      <h2 class="text-lg font-semibold tracking-tight">Technologies</h2>
+      <ul
+        class="mt-4 divide-y divide-border/60 rounded-xl border border-border bg-card/60"
+      >
+        {
+          technologies.map((tech) => (
+            <li class="flex items-start justify-between gap-4 px-5 py-3.5">
+              <div class="min-w-0">
+                <p class="text-sm font-medium">
+                  <a
+                    href={tech.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1.5 transition-colors hover:text-accent"
+                  >
+                    {tech.name}
+                    <Icon
+                      name="external-link"
+                      size={12}
+                      class="text-muted-foreground"
+                    />
+                  </a>
+                </p>
+                <p class="mt-0.5 text-sm leading-relaxed text-muted-foreground">
+                  {tech.description}
+                </p>
+              </div>
+              {tech.license && (
+                <span class="shrink-0 font-mono text-xs text-muted-foreground">
+                  {tech.license}
+                </span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {/* Assets */}
+    <section class="mt-10">
+      <h2 class="text-lg font-semibold tracking-tight">Fonts & assets</h2>
+      <ul
+        class="mt-4 divide-y divide-border/60 rounded-xl border border-border bg-card/60"
+      >
+        {
+          assets.map((asset) => (
+            <li class="flex items-start justify-between gap-4 px-5 py-3.5">
+              <div class="min-w-0">
+                <p class="text-sm font-medium">
+                  <a
+                    href={asset.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1.5 transition-colors hover:text-accent"
+                  >
+                    {asset.name}
+                    <Icon
+                      name="external-link"
+                      size={12}
+                      class="text-muted-foreground"
+                    />
+                  </a>
+                </p>
+                <p class="mt-0.5 text-sm leading-relaxed text-muted-foreground">
+                  {asset.description}
+                </p>
+              </div>
+              {asset.license && (
+                <span class="shrink-0 font-mono text-xs text-muted-foreground">
+                  {asset.license}
+                </span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {/* License */}
+    <section class="mt-10">
+      <div class="rounded-xl border border-border bg-card/60 p-6">
+        <h2 class="text-lg font-semibold tracking-tight">Site license</h2>
+        <p class="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
+          The source code for this site is
+          <a
+            href="https://github.com/lucas-ault/homelab-blog"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-foreground/80 transition-colors hover:text-accent"
+            >on GitHub</a
+          >. It inherits the upstream theme's
+          <a
+            href="https://opensource.org/license/mit"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-foreground/80 transition-colors hover:text-accent"
+            >MIT license</a
+          >. Content (blog posts and project writeups) is © Lucas Ault unless
+          otherwise noted.
+        </p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
