@@ -26,7 +26,7 @@ Flux reconciles it from `applications/production`. The hostname is an explicit r
 - **Infisical** — Path `/ghcr`, keys `GHCR_USERNAME` and `GHCR_TOKEN`. The operator writes a docker config Secret.
 - **Flux CD** — `apps-production` applies `applications/production` after Infisical auth is ready.
 - **Traefik** — Ingress host `lucas.ault.cc`, class `traefik`.
-- **Cloudflare** — `ault.cc` zone. `lucas.ault.cc` is published on the existing `homelab` tunnel. TLS ends at Cloudflare.
+- **Cloudflare** — `ault.cc` zone. `lucas.ault.cc` is published on the existing `homelab` tunnel. `www.lucas.ault.cc` redirects to the apex at the edge. TLS ends at Cloudflare.
 
 ## Why it is not on the lab zone
 
@@ -123,6 +123,20 @@ browser -> Cloudflare edge -> cloudflared -> traefik.kube-system:80 -> Ingress -
 
 TLS ends at Cloudflare. The origin is HTTP inside the cluster. Public traffic does not use the LAN ingress VIP.
 
+### The www name
+
+`www.lucas.ault.cc` shares the apex's CNAME to the tunnel, but it is not an Ingress host — Traefik has no rule for it, so serving it directly would mean touching the cluster for a name the canonical URLs do not use anyway.
+
+Instead, a Cloudflare Single Redirect rule on the `ault.cc` zone handles it before the tunnel:
+
+```text
+http.host eq "www.lucas.ault.cc"  ->  301  https://lucas.ault.cc{path}{query}
+```
+
+The redirect fires at the edge, keeps the path and query string, and never reaches cloudflared. Since canonical tags and `og:url` already point at the apex, the www name only exists to be redirected — and two hostnames serving the same content would be duplicate content anyway.
+
+The debugging detour is worth noting: adding `www` to the tunnel's public hostnames alone still returns cloudflared's `404 page not found`. The request reaches the cluster at that point, but Traefik answers with its own 404 because the Ingress only lists `lucas.ault.cc`. One hostname, two routing layers — both have to agree.
+
 ## Shipping a new build
 
 The manifest tag is `latest`, and `imagePullPolicy` is `Always`. A new package in GHCR does not replace pods that are already running. Those pods keep the image they started with. A new pod pulls `latest` again.
@@ -143,7 +157,7 @@ kubectl get infisicalstaticsecret -n homelab-blog
 
 Both pods should be Ready, on two different workers. The Ingress address is Traefik. `https://lucas.ault.cc` should return the site.
 
-If the pods are `ImagePullBackOff`, the usual cause is `/ghcr` empty or the PAT missing `read:packages`. If the site is Traefik's 404, the Ingress host and the published Cloudflare hostname do not match. If the name does not resolve, DNS for `lucas.ault.cc` is not on the tunnel yet.
+If the pods are `ImagePullBackOff`, the usual cause is `/ghcr` empty or the PAT missing `read:packages`. If the site is Traefik's 404, the Ingress host and the published Cloudflare hostname do not match. If the name does not resolve, DNS for `lucas.ault.cc` is not on the tunnel yet. If `www.lucas.ault.cc` is a plain-text `404 page not found`, it is cloudflared's catch-all — the tunnel has no public hostname for it yet, or the redirect rule is missing.
 
 ## What's Next?
 
