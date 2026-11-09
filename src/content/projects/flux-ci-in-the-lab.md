@@ -1,6 +1,7 @@
 ---
 title: "Adding Flux CD and GitOps to My K3s Homelab"
 description: "Moving my six-node K3s cluster from manually applied Kubernetes manifests to automated GitOps deployments with Flux CD, Kustomize, and GitHub."
+publishedAt: 2026-10-20T20:14:42-07:00
 technologies:
   ["Kubernetes", "K3s", "Flux CD", "GitOps", "GitHub", "Kustomize", "Helm"]
 github: "https://github.com/lucas-ault/home-lab"

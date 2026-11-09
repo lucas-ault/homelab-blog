@@ -1,6 +1,7 @@
 ---
 title: "Project Name"
 description: "A one-line summary for the project card and SEO."
+publishedAt: 2026-09-17
 technologies: ["Python", "Kubernetes"]
 # github: 'https://github.com/lucas-ault/project-name'  # optional
 # demo: 'https://example.com'                           # optional
@@ -31,6 +32,7 @@ Describe the architecture or approach.
 | --------------- | -------- | -------- | ----------------------------------------------------- |
 | `title`         | string   | yes      |                                                       |
 | `description`   | string   | yes      | Shows on project card and detail page                 |
+| `publishedAt`   | date     | yes      | `YYYY-MM-DD`, or a timestamp. Sorts newest first      |
 | `technologies`  | string[] | no       | Shown as chips, used by the filter on /projects       |
 | `github`        | url      | no       | Repo link                                             |
 | `demo`          | url      | no       | Live demo link                                        |
@@ -38,5 +40,5 @@ Describe the architecture or approach.
 | `type`          | enum     | no       | Open Source, SaaS, Client Work, Personal, Experiment  |
 | `status`        | enum     | no       | active, maintained, archived, in-progress             |
 | `year`          | number   | yes      |                                                       |
-| `featured`      | boolean  | no       | Featured projects show first (default: false)         |
+| `featured`      | boolean  | no       | Homepage Featured section (default: false)            |
 | `draft`         | boolean  | no       | Hidden in production, visible in dev (default: false) |

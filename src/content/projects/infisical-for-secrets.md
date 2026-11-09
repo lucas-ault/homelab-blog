@@ -1,6 +1,7 @@
 ---
 title: "Self-Hosting Infisical for Secrets Management in My K3s Homelab"
 description: "Setting up Infisical with Flux CD, CloudNativePG, and Redis Sentinel to make managing secrets across my Kubernetes homelab a little easier."
+publishedAt: 2026-10-20T20:23:26-07:00
 technologies:
   [
     "Kubernetes",

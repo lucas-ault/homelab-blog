@@ -1,6 +1,7 @@
 ---
 title: "Deploying the Homelab Blog on K3s"
 description: "Publishing lucas.ault.cc from a private GHCR image, with Flux applying the manifests and Infisical supplying the pull credential."
+publishedAt: 2026-10-20T20:33:43-07:00
 technologies:
   ["Kubernetes", "K3s", "Flux CD", "Infisical", "GHCR", "Traefik", "Cloudflare"]
 github: "https://github.com/lucas-ault/home-lab"

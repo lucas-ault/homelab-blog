@@ -71,6 +71,7 @@ draft: boolean # optional, default false (hidden in prod, visible in dev)
 ```yaml
 title: string # required
 description: string # required
+publishedAt: date # required, YYYY-MM-DD; lists sort newest first
 technologies: [string] # optional, default []
 github: url # optional
 demo: url # optional

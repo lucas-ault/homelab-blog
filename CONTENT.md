@@ -54,13 +54,14 @@ Key fields by collection:
 | -------------- | -------- | -------- | ---------------------------------------------------- |
 | `title`        | yes      | string   |                                                      |
 | `description`  | yes      | string   | Project card + detail page                           |
+| `publishedAt`  | yes      | date     | `YYYY-MM-DD` or a timestamp. Lists sort newest first |
 | `technologies` | no       | string[] | Chips + filter on /projects                          |
 | `github`       | no       | url      | Repo link                                            |
 | `demo`         | no       | url      | Live demo link                                       |
 | `type`         | no       | enum     | Open Source, SaaS, Client Work, Personal, Experiment |
 | `status`       | no       | enum     | active, maintained, archived, in-progress            |
 | `year`         | yes      | number   |                                                      |
-| `featured`     | no       | boolean  | Shows first (default: false)                         |
+| `featured`     | no       | boolean  | Homepage Featured section (default: false)           |
 | `draft`        | no       | boolean  | Hidden in prod, visible in dev                       |
 
 ## MDX components

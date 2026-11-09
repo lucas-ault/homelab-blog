@@ -1,6 +1,7 @@
 ---
 title: "Adding Private Access to My K3s Homelab with Tailscale"
 description: "Setting up the Tailscale Kubernetes Operator with Flux CD and Infisical to securely access my cluster and internal services from anywhere."
+publishedAt: 2026-10-20T20:32:07-07:00
 technologies:
   ["Kubernetes", "K3s", "Tailscale", "Flux CD", "Infisical", "Headlamp", "Helm"]
 type: "Personal"

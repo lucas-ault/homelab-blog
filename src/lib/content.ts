@@ -22,15 +22,14 @@ export async function getFeaturedPosts(limit = 3): Promise<Post[]> {
   return (featured.length > 0 ? featured : posts).slice(0, limit);
 }
 
-/** All published projects: featured first, then by year descending. */
+/** All published projects, newest first. Drafts are excluded in production builds. */
 export async function getProjects(): Promise<Project[]> {
   const projects = await getCollection("projects", ({ data }) =>
     isProd ? !data.draft : true,
   );
-  return projects.sort((a, b) => {
-    if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
-    return b.data.year - a.data.year;
-  });
+  return projects.sort(
+    (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+  );
 }
 
 export async function getFeaturedProjects(limit = 4): Promise<Project[]> {
@@ -39,12 +38,10 @@ export async function getFeaturedProjects(limit = 4): Promise<Project[]> {
   return (featured.length > 0 ? featured : projects).slice(0, limit);
 }
 
-/** Most recent projects by year, whether or not they are featured. */
+/** Most recent projects, whether or not they are featured. */
 export async function getRecentProjects(limit = 4): Promise<Project[]> {
-  const projects = await getCollection("projects", ({ data }) =>
-    isProd ? !data.draft : true,
-  );
-  return projects.sort((a, b) => b.data.year - a.data.year).slice(0, limit);
+  const projects = await getProjects();
+  return projects.slice(0, limit);
 }
 
 export interface TagInfo {

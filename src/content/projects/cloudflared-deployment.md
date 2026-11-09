@@ -1,6 +1,7 @@
 ---
 title: "Publishing My K3s Homelab with Cloudflare Tunnel"
 description: "Setting up Cloudflare Tunnel with Kubernetes, Traefik, Flux CD, and Infisical to securely expose homelab applications without opening inbound ports."
+publishedAt: 2026-10-20T20:28:13-07:00
 technologies:
   [
     "Kubernetes",

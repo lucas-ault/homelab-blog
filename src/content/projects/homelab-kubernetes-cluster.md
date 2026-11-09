@@ -1,6 +1,7 @@
 ---
 title: "Building a Highly Available K3s Homelab"
 description: "Building a six-node Kubernetes cluster across three Proxmox hosts, with a highly available control plane, kube-vip, and Traefik ingress."
+publishedAt: 2026-10-20T17:55:16-07:00
 technologies:
   [
     "Kubernetes",

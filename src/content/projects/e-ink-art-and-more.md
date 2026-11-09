@@ -1,6 +1,7 @@
 ---
 title: "From a Stock Panel to a Studio"
 description: "Turning a 13.3-inch six-color e-paper panel into a networked art display with ESP32 firmware, a Python studio API, and a Next.js interface."
+publishedAt: 2026-11-08T15:58:33-08:00
 technologies:
   [
     "ESP32-S3",
